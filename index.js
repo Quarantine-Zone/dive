@@ -25,11 +25,8 @@ let jwtInstance = jwt({
  * Routes for user manipulation
  */
 
-// Create a user
-app.post('/user', jwtInstance, user.create);
-
 // Update user
-app.post('/user/:uid', jwtInstance, user.update);
+app.post('/user', jwtInstance, user.update);
 
 // Delete user
 app.delete('/user', jwtInstance, user.remove);

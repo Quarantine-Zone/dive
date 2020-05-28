@@ -3,10 +3,10 @@ let _jwt = require('jsonwebtoken');
 /**
  * Handles sending a success response from our api.
  */
-module.exports.sendOk = (res, data) => {
+module.exports.sendOk = (res, data, scope) => {
     // Payload
     let result = {
-        state: "success",
+        state: 'success',
         result: data
     }
 
@@ -14,16 +14,18 @@ module.exports.sendOk = (res, data) => {
     let token = _jwt.sign(JSON.stringify(result), process.env.JWT_SECRET);
 
     // Send a ok status and the token
-    res.status(200).send(token);
+    res.set('RequestScope', scope);
+    res.set('Authorization', 'Bearer ' + token);
+    res.status(200).send();
 }
 
 /**
- * Handles sendinga failure response from our api.
+ * Handles sending a failure response from our api.
  */
-module.exports.sendNotOk = (res, err) => {
+module.exports.sendNotOk = (res, err, scope) => {
     // Payload
     let result = {
-        state: "failed",
+        state: 'failed',
         result: err
     }
 
@@ -31,5 +33,7 @@ module.exports.sendNotOk = (res, err) => {
     let token = _jwt.sign(JSON.stringify(result), process.env.JWT_SECRET);
 
     // Send a generic internal server error and the token
-    res.status(500).send(token);
+    res.set('RequestScope', scope);
+    res.set('Authorization', 'Bearer ' + token);
+    res.status(500).send();
 }
